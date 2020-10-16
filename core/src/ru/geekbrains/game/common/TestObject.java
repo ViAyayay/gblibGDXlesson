@@ -7,11 +7,13 @@ public class TestObject extends Vector2{
     public Texture img;
     public boolean isNoBlocked = true;
     public Vector2 moving = new Vector2(0, 0),
-                   target = new Vector2(x, y);
+                   target = new Vector2(0, 0),
+                   drugPos =  new Vector2(0, 0);
 
     public TestObject(Texture img, Vector2 pos) {
         this.img = img;
         super.set(pos);
+        target.set(pos.x, pos.y);
     }
 
     public Vector2 getCenter(){

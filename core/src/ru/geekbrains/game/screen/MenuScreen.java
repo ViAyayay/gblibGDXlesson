@@ -23,12 +23,16 @@ public class MenuScreen extends BaseScreen {
         batch.begin();
         batch.draw(obg.img, obg.getCenter().x, obg.getCenter().y);
         batch.end();
-        if(obg.isNoBlocked) obg.move();
+        if(obg.isNoBlocked) {
+            obg.move();
+        }else {
+
+        }
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
+        obg.isNoBlocked = true;
         return super.touchUp(screenX, screenY, pointer, button);
     }
 
@@ -38,13 +42,21 @@ public class MenuScreen extends BaseScreen {
     }
 
     @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        int nScreenY = Gdx.graphics.getHeight() - screenY;
+        if(!obg.isNoBlocked) obg.set((new Vector2(screenX,nScreenY)).sub(obg.drugPos));
+        return super.touchDragged(screenX, screenY, pointer);
+    }
+
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         float halfObjX = obg.img.getWidth()/2;
         float halfObjY = obg.img.getHeight()/2;
         int nScreenY = Gdx.graphics.getHeight() - screenY;
 
         if((screenX <= obg.x+halfObjX && screenX >= obg.x-halfObjX) && (nScreenY <= obg.y+halfObjY && nScreenY >= obg.y-halfObjY)){
-            System.out.println("AAAAAAAAAAA");
+            obg.drugPos.set(screenX - obg.x, nScreenY - obg.y);
+            obg.isNoBlocked = false;
         }else {
             obg.target.set(screenX, nScreenY);
         }
