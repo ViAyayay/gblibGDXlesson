@@ -27,8 +27,4 @@ public class TestObject extends Vector2{
             super.set(target);
         }
     }
-
-//    public void setCenter(int screenX, int screenY) {
-//        pos.set(screenX-img.getWidth(), Gdx.graphics.getHeight() - screenY-img.getHeight());
-//    }
 }
