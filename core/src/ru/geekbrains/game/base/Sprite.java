@@ -24,7 +24,7 @@ public class Sprite extends Rect {
         int y = 0;
         for (int j = 0; j < i; j++) {
             regions[j] = new TextureRegion(region, x, y, region.getRegionWidth()/i, region.getRegionHeight());
-            x += region.getRegionHeight()/i;
+            x += region.getRegionWidth()/i;
         }
 
     }
@@ -78,5 +78,14 @@ public class Sprite extends Rect {
     public void setScale(float scale) {
         this.scale = scale;
     }
+
+    public void nextFrame(){
+        int i = frame;
+        if(++i==regions.length) i = 0;
+        frame = i;
+    }
+
+    public void setFrame(int i){if(regions.length > i && i>=0) frame = i;}
+
 
 }

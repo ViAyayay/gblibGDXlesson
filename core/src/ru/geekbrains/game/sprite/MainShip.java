@@ -11,17 +11,18 @@ import ru.geekbrains.game.base.Sprite;
 import ru.geekbrains.game.math.Rect;
 
 public class MainShip extends Sprite {
-    private final Vector2 v;
-    private final float SPD = 0.008f;
+    private final Vector2 SPD = new Vector2(0.008f, 0);
+    private boolean isMove = false;
     private Vector2 touch;
-    private int pointer = -1;
     private int key;
+    private int pointer = -1;
     private Rect worldBounds;
+    private int blinkTimer;
 
     public MainShip(TextureAtlas atlas) {
         super(atlas.findRegion("main_ship"), 2);
         setHeightProportion(0.25F);
-        v = new Vector2();
+        touch = new Vector2();
     }
 
     @Override
@@ -32,11 +33,10 @@ public class MainShip extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if(v.isZero() || this.pointer == pointer) {
+        if(!isMove) {
             this.pointer = pointer;
             this.touch = touch;
-            if(touch.x < pos.x) v.x = -SPD;
-            if(touch.x > pos.x) v.x = SPD;
+            isMove = true;
         }
         return false;
     }
@@ -45,37 +45,67 @@ public class MainShip extends Sprite {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if(this.pointer == pointer) {
             this.pointer = -1;
-            v.setZero();
+            isMove = false;
         }
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if(v.isZero()) {
-            if(keycode == Input.Keys.LEFT) v.x = -SPD;
-            if(keycode == Input.Keys.RIGHT) v.x = SPD;
+
+            this.key = keycode;
+            if(keycode == Input.Keys.LEFT) {
+                touch.set(worldBounds.getLeft(), 0);
+                isMove = true;
+            }
+            if(keycode == Input.Keys.RIGHT) {
+                touch.set(worldBounds.getRight(), 0);
+                isMove = true;
+
         }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        if(pointer == -1) {
-            v.setZero();
+        if(pointer == -1 && key==keycode) {
+            this.pointer = -1;
+            this.key = -1;
+            isMove = false;
         }
         return false;
     }
 
     @Override
     public void update(float delta) {
-        if(!v.isZero()) {
-            pos.add(v);
+        if(isMove) {
+            if(touch.x < pos.x) pos.sub(SPD);
+            if(touch.x > pos.x) pos.add(SPD);
             blink();
-            System.out.println(2 + v.toString());
         }
+            blink(0);
+
     }
 
     private void blink() {
+        if(blinkTimer > 10) {
+            blink(blinkTimer);
+        } else {
+            blink(31);
+        }
+    }
+
+    private void blink(int time) {
+        if(blinkTimer < time) {
+            blinkTimer = time;
+        }
+        blinkTimer--;
+        if(blinkTimer <= 0){
+            setFrame(0);
+            return;
+        }
+        if(blinkTimer%20 == 0) {
+            nextFrame();
+        }
     }
 }
