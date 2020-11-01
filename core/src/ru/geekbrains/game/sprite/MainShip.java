@@ -35,6 +35,7 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
     this.bulletV.set(0, 0.5f);
     this.reloadInterval = RELOAD_INTERVAL;
     this.hp = HP;
+    isActive = true;
 }
 
     @Override

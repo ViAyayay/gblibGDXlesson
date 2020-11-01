@@ -19,7 +19,8 @@ public class EnemyMediumSettingsDto extends EnemySettingsDto {
     public EnemyMediumSettingsDto(TextureAtlas atlas, Sound bulletSound) {
         TextureRegion enemy0 = atlas.findRegion("enemy1");
         setRegions(Regions.split(enemy0, 1, 2, 2));
-        setV0(new Vector2(0f, -0.03f));
+        setV(new Vector2(0f, -0.03f));
+        setV0(new Vector2(0f, -0.2f));
         setBulletRegion(atlas.findRegion("bulletEnemy"));
         setBulletHeight(ENEMY_MEDIUM_BULLET_HEIGHT);
         setBulletV(new Vector2(0f, -0.25f));

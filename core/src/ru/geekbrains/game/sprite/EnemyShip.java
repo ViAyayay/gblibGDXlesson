@@ -16,14 +16,15 @@ public class EnemyShip extends Ship {
     public void update(float delta) {
         bulletPos.set(pos.x, getBottom());
         super.update(delta);
-        if (getBottom() < worldBounds.getBottom()) {
+        if (getTop() < worldBounds.getBottom()) {
             destroy();
         }
     }
 
     public void set(EnemySettingsDto settings) {
         this.regions = settings.getRegions();
-        this.v.set(settings.getV0());
+        this.v.set(settings.getV());
+        this.v0.set(settings.getV0());
         this.bulletRegion = settings.getBulletRegion();
         this.bulletHeight = settings.getBulletHeight();
         this.bulletV.set(settings.getBulletV());
@@ -34,4 +35,10 @@ public class EnemyShip extends Ship {
         this.hp = settings.getHp();
     }
 
+    @Override
+    public void destroy() {
+        isActive = false;
+        isShoot = false;
+        super.destroy();
+    }
 }

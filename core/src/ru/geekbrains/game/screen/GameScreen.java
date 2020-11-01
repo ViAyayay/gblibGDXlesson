@@ -13,6 +13,8 @@ import ru.geekbrains.game.math.Rect;
 import ru.geekbrains.game.pool.BulletPool;
 import ru.geekbrains.game.pool.EnemyShipPool;
 import ru.geekbrains.game.sprite.Background;
+import ru.geekbrains.game.sprite.Bullet;
+import ru.geekbrains.game.sprite.EnemyShip;
 import ru.geekbrains.game.sprite.MainShip;
 import ru.geekbrains.game.sprite.Star;
 import ru.geekbrains.game.utils.EnemyEmitter;
@@ -32,6 +34,8 @@ public class GameScreen extends BaseScreen {
     private EnemyShipPool enemyShipPool;
     private MainShip mainShip;
     private EnemyEmitter enemyEmitter;
+
+    private Vector2 tmpPos = new Vector2();
 
     @Override
     public void show() {
@@ -114,6 +118,14 @@ public class GameScreen extends BaseScreen {
     private void update(float delta) {
         for (Star star : stars) {
             star.update(delta);
+        }
+        for (Bullet bullet : bulletPool.getActiveObjects()) {
+            tmpPos.set(bullet.pos);
+            if(tmpPos.sub(mainShip.pos).len() < (mainShip.getHalfHeight()-0.01f)) {bullet.destroy();}
+        }
+        for (EnemyShip ship : enemyShipPool.getActiveObjects()) {
+            tmpPos.set(ship.pos);
+            if(tmpPos.sub(mainShip.pos).len() < mainShip.getHalfHeight()) {ship.destroy();}
         }
         bulletPool.updateActiveSprites(delta);
         enemyShipPool.updateActiveSprites(delta);

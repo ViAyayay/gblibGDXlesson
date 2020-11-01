@@ -8,6 +8,7 @@ public abstract class EnemySettingsDto {
 
     private TextureRegion[] regions;
     private Vector2 v0;
+    private Vector2 v;
     private TextureRegion bulletRegion;
     private float bulletHeight;
     private Vector2 bulletV;
@@ -31,6 +32,10 @@ public abstract class EnemySettingsDto {
 
     public void setV0(Vector2 v0) {
         this.v0 = v0;
+    }
+
+    public void setV (Vector2 v) {
+        this.v = v;
     }
 
     public TextureRegion getBulletRegion() {
@@ -96,4 +101,6 @@ public abstract class EnemySettingsDto {
     public void setHp(int hp) {
         this.hp = hp;
     }
+
+    public  Vector2 getV() {return v;};
 }

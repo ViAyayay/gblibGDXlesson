@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.game.math.Rect;
+import ru.geekbrains.game.math.Rnd;
 import ru.geekbrains.game.pool.BulletPool;
 import ru.geekbrains.game.sprite.Bullet;
 
@@ -25,7 +26,8 @@ public abstract class Ship extends Sprite {
     protected float reloadTimer;
     protected float reloadInterval;
 
-    protected boolean isShoot = false;
+    protected boolean isShoot;
+    protected boolean isActive;
 
     protected int hp;
 
@@ -34,6 +36,8 @@ public abstract class Ship extends Sprite {
         v0 = new Vector2();
         bulletV = new Vector2();
         bulletPos = new Vector2();
+        isShoot = false;
+        isActive = false;
     }
 
     public Ship(TextureRegion region, int rows, int cols, int frames) {
@@ -42,16 +46,27 @@ public abstract class Ship extends Sprite {
         v0 = new Vector2();
         bulletV = new Vector2();
         bulletPos = new Vector2();
+        isShoot = false;
+        isActive = false;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        pos.mulAdd(v, delta);
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval && isShoot) {
-            reloadTimer = 0;
-            shoot();
+        if(!isActive){
+            pos.mulAdd(v0, delta);
+            if(getTop() <= worldBounds.getTop()){
+                isActive = true;
+                isShoot = true;
+                reloadTimer = Rnd.nextFloat(reloadInterval/2, reloadInterval);
+            }
+        }else {
+            pos.mulAdd(v, delta);
+            reloadTimer += delta;
+            if (reloadTimer >= reloadInterval && isShoot) {
+                reloadTimer = 0;
+                shoot();
+            }
         }
     }
 
