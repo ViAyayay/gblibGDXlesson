@@ -12,11 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.game.math.MatrixUtils;
 import ru.geekbrains.game.math.Rect;
 
-public class BaseScreen implements Screen, InputProcessor {
+public abstract class BaseScreen implements Screen, InputProcessor {
 
     protected SpriteBatch batch;
     private Rect screenBounds;
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
 
     private Matrix4 worldToGl;
