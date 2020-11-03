@@ -119,14 +119,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
-        for (Bullet bullet : bulletPool.getActiveObjects()) {
-            tmpPos.set(bullet.pos);
-            if(tmpPos.sub(mainShip.pos).len() < (mainShip.getHalfHeight()-0.01f)) {bullet.destroy();}
-        }
-        for (EnemyShip ship : enemyShipPool.getActiveObjects()) {
-            tmpPos.set(ship.pos);
-            if(tmpPos.sub(mainShip.pos).len() < mainShip.getHalfHeight()) {ship.destroy();}
-        }
+
         bulletPool.updateActiveSprites(delta);
         enemyShipPool.updateActiveSprites(delta);
         mainShip.update(delta);
@@ -134,7 +127,25 @@ public class GameScreen extends BaseScreen {
     }
 
     private void checkCollision() {
-
+        for (Bullet bullet : bulletPool.getActiveObjects()) {
+            if(bullet.getOwner() == mainShip){
+                for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()){
+                    if(enemyShip.pos.dst(bullet.pos) < enemyShip.getHalfWidth()){
+                        bullet.destroy();
+                        break;
+                    }
+                }
+            } else {
+                if(bullet.pos.dst(mainShip.pos) < mainShip.getHalfWidth()){
+                    bullet.destroy();
+                }
+            }
+        }
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
+            if(enemyShip.pos.dst(mainShip.pos) < mainShip.getHalfHeight()) {
+                enemyShip.destroy();
+            }
+        }
     }
 
     private void freeAllDestroyed() {
