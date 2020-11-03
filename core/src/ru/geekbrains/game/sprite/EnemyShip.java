@@ -4,11 +4,13 @@ import ru.geekbrains.game.base.EnemySettingsDto;
 import ru.geekbrains.game.base.Ship;
 import ru.geekbrains.game.math.Rect;
 import ru.geekbrains.game.pool.BulletPool;
+import ru.geekbrains.game.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
     }
 
@@ -17,7 +19,9 @@ public class EnemyShip extends Ship {
         bulletPos.set(pos.x, getBottom());
         super.update(delta);
         if (getTop() < worldBounds.getBottom()) {
-            destroy();
+            isActive = false;
+            isShoot = false;
+            destroyed = true;
         }
     }
 
@@ -40,5 +44,10 @@ public class EnemyShip extends Ship {
         isActive = false;
         isShoot = false;
         super.destroy();
+    }
+
+    @Override
+    protected boolean inPosition() {
+        return getTop() <= worldBounds.getTop();
     }
 }

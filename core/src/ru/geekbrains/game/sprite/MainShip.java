@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.game.base.Ship;
 import ru.geekbrains.game.math.Rect;
 import ru.geekbrains.game.pool.BulletPool;
+import ru.geekbrains.game.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -24,25 +25,26 @@ public class MainShip extends Ship {
     private int key;
     private int pointer = INVALID_POINTER;
 
-public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
     super(atlas.findRegion("main_ship"), 1, 2, 2);
     this.bulletPool = bulletPool;
+    this.explosionPool = explosionPool;
     this.bulletRegion = atlas.findRegion("bulletMainShip");
     this.bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
     this.bulletHeight = 0.01f;
     this.damage = 1;
-    this.v0.set(0.5f, 0);
+    this.v0.set(0f, 0.2f);
     this.bulletV.set(0, 0.5f);
     this.reloadInterval = RELOAD_INTERVAL;
     this.hp = HP;
-    isActive = true;
 }
 
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(SHIP_HEIGHT);
-        setBottom(worldBounds.getBottom() + MARGIN);
+        if(isActive) setBottom(worldBounds.getBottom() + MARGIN);
+        else setTop(worldBounds.getBottom());
     }
 
     @Override
@@ -109,6 +111,11 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         }
 //            blink(0);
 
+    }
+
+    @Override
+    protected boolean inPosition() {
+        return getBottom() >= worldBounds.getBottom()+MARGIN;
     }
 
     public void dispose() {
