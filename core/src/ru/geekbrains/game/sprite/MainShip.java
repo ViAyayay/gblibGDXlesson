@@ -42,6 +42,7 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosi
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
+        activePosition = worldBounds.getBottom()+MARGIN;
         setHeightProportion(SHIP_HEIGHT);
         if(isActive) setBottom(worldBounds.getBottom() + MARGIN);
         else setTop(worldBounds.getBottom());
@@ -115,7 +116,15 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosi
 
     @Override
     protected boolean inPosition() {
-        return getBottom() >= worldBounds.getBottom()+MARGIN;
+        return getBottom() >= activePosition;
+    }
+
+    @Override
+    public void isNotActive() {
+        super.isNotActive();
+        setBottom(worldBounds.getTop());
+        v0.isZero();
+        activePosition = worldBounds.getTop();
     }
 
     public void dispose() {

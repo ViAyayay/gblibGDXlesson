@@ -22,6 +22,7 @@ public abstract class Ship extends Sprite {
     protected Sound bulletSound;
     protected float bulletHeight;
     protected int damage;
+    protected float activePosition;
 
     protected final Vector2 v;
     protected final Vector2 v0;
@@ -64,7 +65,7 @@ public abstract class Ship extends Sprite {
             pos.mulAdd(v0, delta);
             if(inPosition()){
                 isActive = true;
-                isShoot = true;
+//                isShoot = true;
                 reloadTimer = Rnd.nextFloat(reloadInterval/2, reloadInterval);
             }
         }else {
@@ -93,6 +94,7 @@ public abstract class Ship extends Sprite {
         frame = 1;
         damageAnimateTimer = 0f;
         hp -= damage;
+        System.out.println(this.getClass().getName() + " hp: " + hp);
         if (hp <= 0) {
             hp = 0;
             destroy();
@@ -101,6 +103,15 @@ public abstract class Ship extends Sprite {
 
     public int getDamage() {
         return damage;
+    }
+
+    public void setActivePosition(float activePosition) {
+        this.activePosition = activePosition;
+    }
+
+    public void isNotActive(){
+        isActive = false;
+        isShoot = false;
     }
 
     private void shoot() {

@@ -19,6 +19,7 @@ public class EnemyEmitter {
     private Rect worldBounds;
     private EnemyShipPool enemyShipPool;
     private float generateTimer;
+    private boolean inActive;
 
     private EnemySettingsDto enemySmallSettingsDto;
     private EnemySettingsDto enemyMediumSettingsDto;
@@ -27,6 +28,7 @@ public class EnemyEmitter {
     public EnemyEmitter(Rect worldBounds, EnemyShipPool enemyShipPool, Sound bulletSound, TextureAtlas atlas) {
         this.worldBounds = worldBounds;
         this.enemyShipPool = enemyShipPool;
+        inActive = true;
         enemySmallSettingsDto = new EnemySmallSettingsDto(atlas, bulletSound);
         enemyMediumSettingsDto = new EnemyMediumSettingsDto(atlas, bulletSound);
         enemyBigSettingsDto = new EnemyBigSettingsDto(atlas, bulletSound);
@@ -34,7 +36,7 @@ public class EnemyEmitter {
 
     public void generate(float delta) {
         generateTimer += delta;
-        if (generateTimer >= GENERATE_INTERVAL) {
+        if (inActive && generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0;
             EnemyShip enemyShip = enemyShipPool.obtain();
             float type = (float) Math.random();
@@ -48,5 +50,9 @@ public class EnemyEmitter {
             enemyShip.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemyShip.getHalfWidth(), worldBounds.getRight() - enemyShip.getHalfWidth());
             enemyShip.setBottom(worldBounds.getTop());
         }
+    }
+
+    public void stop() {
+        inActive = false;
     }
 }

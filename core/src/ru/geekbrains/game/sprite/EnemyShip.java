@@ -37,6 +37,8 @@ public class EnemyShip extends Ship {
         this.reloadInterval = settings.getReloadInterval();
         setHeightProportion(settings.getHeight());
         this.hp = settings.getHp();
+        this.activePosition = worldBounds.getTop();
+        isShoot = true;
     }
 
     @Override
@@ -47,7 +49,14 @@ public class EnemyShip extends Ship {
     }
 
     @Override
+    public void isNotActive() {
+        super.isNotActive();
+        this.activePosition = worldBounds.getBottom();
+    }
+
+    @Override
     protected boolean inPosition() {
-        return getTop() <= worldBounds.getTop();
+
+        return getTop() <= activePosition;
     }
 }
