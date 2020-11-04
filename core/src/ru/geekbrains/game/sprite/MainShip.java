@@ -15,7 +15,7 @@ public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float MARGIN = 0.05f;
     private static final float RELOAD_INTERVAL = 0.2f;
-    private static final int HP = 100;
+    private static final int HP = 10;
 
     private static final int INVALID_POINTER = -1;
 
@@ -42,6 +42,7 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosi
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
+        activePosition = worldBounds.getBottom()+MARGIN;
         setHeightProportion(SHIP_HEIGHT);
         if(isActive) setBottom(worldBounds.getBottom() + MARGIN);
         else setTop(worldBounds.getBottom());
@@ -115,7 +116,15 @@ public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosi
 
     @Override
     protected boolean inPosition() {
-        return getBottom() >= worldBounds.getBottom()+MARGIN;
+        return getBottom() >= activePosition;
+    }
+
+    @Override
+    public void isNotActive() {
+        super.isNotActive();
+        setBottom(worldBounds.getTop());
+        v0.isZero();
+        activePosition = worldBounds.getTop();
     }
 
     public void dispose() {

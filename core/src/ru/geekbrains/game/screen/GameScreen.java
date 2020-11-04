@@ -1,5 +1,6 @@
 package ru.geekbrains.game.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -24,6 +25,7 @@ public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 64;
 
+    private Game game;
     private TextureAtlas atlas;
     private Texture bg;
     private Music music;
@@ -37,6 +39,10 @@ public class GameScreen extends BaseScreen {
     private ExplosionPool explosionPool;
     private MainShip mainShip;
     private EnemyEmitter enemyEmitter;
+
+    public GameScreen(Game game) {
+        this.game = game;
+    }
 
 //    private Vector2 tmpPos = new Vector2();
 
@@ -133,6 +139,21 @@ public class GameScreen extends BaseScreen {
         mainShip.update(delta);
         enemyEmitter.generate(delta);
 
+        if(mainShip.isDestroyed()) {
+            gameOver();
+        }
+    }
+
+    private void gameOver() {
+        enemyEmitter.stop();
+        mainShip.isNotActive();
+        music.setLooping(false);
+        for (EnemyShip enemyShip : enemyShipPool.getActiveObjects()) {
+            enemyShip.isNotActive();
+        }
+        if (enemyShipPool.getActiveObjects().size()<=0){
+            game.setScreen(new GameOverScreen(game));
+        }
     }
 
     private void checkCollision() {
